@@ -92,6 +92,8 @@ obj-$(CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_FW_UPDATE) 	+= synaptics_fw_update.o
 obj-$(CONFIG_TOUCHSCREEN_GT9XX)		+= gt9xx/
 obj-$(CONFIG_TOUCHSCREEN_HIMAX_CHIPSET)	+= hxchipset/
 obj-$(CONFIG_TOUCHSCREEN_FTS)		+= focaltech_touch/
+#hebiao@wind-mobi.com 20170824 begin
 obj-$(CONFIG_TOUCHSCREEN_FT5346I)		+= ft5346i/
 obj-$(CONFIG_TOUCHSCREEN_GT917D)		+= gt917d/
 obj-$(CONFIG_TOUCHSCREEN_HX852xES)		+= HX852xES/
+#hebiao@wind-mobi.com 20170824 end

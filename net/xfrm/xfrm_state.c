@@ -585,10 +585,8 @@ int xfrm_state_flush(struct net *net, u8 proto, bool task_valid)
 
 	spin_lock_bh(&net->xfrm.xfrm_state_lock);
 	err = xfrm_state_flush_secctx_check(net, proto, task_valid);
-	if (err) {
-		pr_err("kp log: failed @ xfrm_state_flush_secctx_check with err [%d]\n", err);
+	if (err)
 		goto out;
-	}
 
 	err = -ESRCH;
 	for (i = 0; i <= net->xfrm.state_hmask; i++) {
@@ -601,7 +599,6 @@ restart:
 				spin_unlock_bh(&net->xfrm.xfrm_state_lock);
 
 				err = xfrm_state_delete(x);
-				pr_err("kp log: failed @ xfrm_state_delete with err [%d]\n", err);
 				xfrm_audit_state_delete(x, err ? 0 : 1,
 							task_valid);
 				xfrm_state_put(x);
@@ -613,10 +610,8 @@ restart:
 			}
 		}
 	}
-	if (cnt) {
-		pr_err("kp log: all state deletion with errors marking err as 0\n");
+	if (cnt)
 		err = 0;
-	}
 
 out:
 	spin_unlock_bh(&net->xfrm.xfrm_state_lock);
@@ -1360,15 +1355,6 @@ out:
 		tasklet_hrtimer_start(&x1->mtimer, ktime_set(1, 0), HRTIMER_MODE_REL);
 		if (x1->curlft.use_time)
 			xfrm_state_check_expire(x1);
-
-		if (x->props.output_mark) {
-			spin_lock_bh(&net->xfrm.xfrm_state_lock);
-
-			x1->props.output_mark = x->props.output_mark;
-
-			__xfrm_state_bump_genids(x1);
-			spin_unlock_bh(&net->xfrm.xfrm_state_lock);
-		}
 
 		err = 0;
 		x->km.state = XFRM_STATE_DEAD;

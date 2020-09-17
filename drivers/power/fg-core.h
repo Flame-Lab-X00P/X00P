@@ -74,7 +74,7 @@
 #define FG_SRAM_LEN			504
 #define PROFILE_LEN			224
 #define PROFILE_COMP_LEN		148
-#define BUCKET_COUNT			8
+#define BUCKET_COUNT			20
 #define BUCKET_SOC_PCT			(256 / BUCKET_COUNT)
 
 #define KI_COEFF_MAX			62200
@@ -245,7 +245,6 @@ struct fg_dt_props {
 	bool	auto_recharge_soc;
 	bool	use_esr_sw;
 	bool	disable_esr_pull_dn;
-	bool	disable_fg_twm;
 	int	cutoff_volt_mv;
 	int	empty_volt_mv;
 	int	vbatt_low_thr_mv;
@@ -280,7 +279,6 @@ struct fg_dt_props {
 	int	slope_limit_temp;
 	int	esr_pulse_thresh_ma;
 	int	esr_meas_curr_ma;
-	int	ki_coeff_full_soc_dischg;
 	int	sync_sleep_threshold_ma;
 	int	jeita_thresholds[NUM_JEITA_LEVELS];
 	int	ki_coeff_soc[KI_COEFF_SOC_LEVELS];
@@ -391,7 +389,6 @@ struct fg_chip {
 	struct fg_batt_props	bp;
 	struct fg_cyc_ctr_data	cyc_ctr;
 	struct notifier_block	nb;
-	struct notifier_block	twm_nb;
 	struct fg_cap_learning  cl;
 	struct alarm            esr_sw_timer;
 	struct mutex		bus_lock;
@@ -433,7 +430,6 @@ struct fg_chip {
 	bool			slope_limit_en;
 	bool			use_ima_single_mode;
 	bool			usb_present;
-	bool			twm_state;
 	struct completion	soc_update;
 	struct completion	soc_ready;
 	struct delayed_work	profile_load_work;
@@ -444,6 +440,19 @@ struct fg_chip {
 	struct delayed_work	sram_dump_work;
 	struct fg_circ_buf	ibatt_circ_buf;
 	struct fg_circ_buf	vbatt_circ_buf;
+
+//ASUS_BSP battery safety upgrade +++
+	unsigned long condition1_battery_time;
+	unsigned long condition2_battery_time;
+	int condition1_cycle_count;
+	int condition2_cycle_count;
+	unsigned long condition1_temp_vol_time;
+	unsigned long condition2_temp_vol_time;
+	unsigned long condition1_temp_time;
+	unsigned long condition2_temp_time;
+	unsigned long condition1_vol_time;
+	unsigned long condition2_vol_time;
+//ASUS_BSP battery safety upgrade ---
 };
 
 /* Debugfs data structures are below */

@@ -57,10 +57,7 @@ static struct switch_dev otg_switch_data;
 #define MSM_USB_PHY_CSR_BASE (motg->phy_csr_regs)
 
 #define DRIVER_NAME	"msm_otg"
-#undef dev_dbg
-#define dev_dbg dev_info
-#undef pr_debug
-#define pr_debug pr_info
+
 #define CHG_RECHECK_DELAY	(jiffies + msecs_to_jiffies(2000))
 #define ULPI_IO_TIMEOUT_USEC	(10 * 1000)
 #define USB_PHY_3P3_VOL_MIN	3050000 /* uV */

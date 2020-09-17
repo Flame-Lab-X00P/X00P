@@ -909,7 +909,7 @@ static int qpnp_mpp_set(struct qpnp_led_data *led)
 			/*config pwm for brightness scaling*/
 			period_us = led->mpp_cfg->pwm_cfg->pwm_period_us;
 			if (greenBlinking)
-				period_us = 2000000;	//2.5s
+				period_us = 2500000;	//2.5s
 			if (period_us > INT_MAX / NSEC_PER_USEC) {	//2147483
 				duty_us = (period_us * led->cdev.brightness) /
 					LED_FULL;

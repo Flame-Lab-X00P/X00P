@@ -84,6 +84,7 @@ void msm_torch_brightness_set(struct led_classdev *led_cdev,
 
 	led_trigger_event(torch_trigger, value);
 };
+//zhenglihong@wind-mobi.com 20171025 begin
 
 static struct led_classdev msm_torch_led[MAX_LED_TRIGGERS] = {
 	{

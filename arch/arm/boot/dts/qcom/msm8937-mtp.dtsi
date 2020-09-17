@@ -71,7 +71,6 @@
 		fp-gpio-power = <&tlmm  86 0x00>;
 		status = "okay";
 	    };
-/*
 	hbtp {
 		compatible = "qcom,hbtp-input";
 		vcc_dig-supply = <&pm8937_l5>;
@@ -79,7 +78,7 @@
 		qcom,dig-vtg-min = <1800000>;
 		qcom,dig-vtg-max = <1800000>;
 	};
-*/
+
 	//liulinsheng@wind-mobi.com 20170824 begin
 	usb_tem_det: usb_tem_det{
 		compatible = "qcom, usb_tem_det-eint";
@@ -451,14 +450,6 @@
 	qcom,mdss-dsi-pan-enable-dynamic-fps;
 	qcom,mdss-dsi-pan-fps-update = "dfps_immediate_porch_mode_vfp";
 };
-
-//amt_bsp 20191226 begin
-&dsi_boe66_st7703_720p_video {
-	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
-	//qcom,mdss-dsi-pan-enable-dynamic-fps;
-	qcom,mdss-dsi-pan-fps-update = "dfps_immediate_porch_mode_vfp";
-};
-//amt_bsp 20191226 end
 
 /* PM8937 GPIO configuration */
 &pm8937_gpios {

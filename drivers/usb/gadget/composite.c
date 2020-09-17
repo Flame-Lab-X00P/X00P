@@ -22,10 +22,6 @@
 #include <linux/usb/composite.h>
 #include <linux/usb/msm_hsusb.h>
 #include <asm/unaligned.h>
-#undef dev_dbg
-#define dev_dbg dev_info
-#undef pr_debug
-#define pr_debug pr_info
 
 #include "u_os_desc.h"
 #define SSUSB_GADGET_VBUS_DRAW 900 /* in mA */
@@ -2364,13 +2360,7 @@ composite_resume(struct usb_gadget *gadget)
 				f->func_wakeup_pending = 0;
 			}
 
-			/*
-			 * Call function resume irrespective of the speed.
-			 * Individual function needs to retain the USB3 Function
-			 * suspend state through out the Device suspend entry
-			 * and exit process.
-			 */
-			if (f->resume)
+			if (gadget->speed != USB_SPEED_SUPER && f->resume)
 				f->resume(f);
 		}
 

@@ -4406,6 +4406,7 @@ static int mmc_blk_probe(struct mmc_card *card)
 		pm_runtime_enable(&card->dev);
 	}
 
+    mmc_blk_done = 1;
 	return 0;
 
  out:
@@ -4413,7 +4414,7 @@ static int mmc_blk_probe(struct mmc_card *card)
 	mmc_blk_remove_req(md);
 	return 0;
 }
-
+//zhangkaiyuan@wind-mobi.com 20180102 end
 static void mmc_blk_remove(struct mmc_card *card)
 {
 	struct mmc_blk_data *md = mmc_get_drvdata(card);

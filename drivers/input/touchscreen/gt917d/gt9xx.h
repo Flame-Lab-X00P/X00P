@@ -93,7 +93,7 @@ extern wind_device_info_t wind_device_info;
 //hebiao@wind-mobi.com 20160907 begin
 #if GTP_GESTURE_WAKEUP
 #define	 KEY_GESTURE_DOUBLE_CLICK				KEY_F21
-#define  KEY_GESTURE_UP                         KEY_F24  
+#define  KEY_GESTURE_UP                         KEY_F21  
 #define  KEY_GESTURE_W                          KEY_F13
 #define  KEY_GESTURE_S                          KEY_F22
 #define  KEY_GESTURE_E                          KEY_F15

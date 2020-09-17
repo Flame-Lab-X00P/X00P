@@ -721,7 +721,5 @@ CONFIG_BLK_DEV_LOOP=y
 CONFIG_ZRAM_LZ4_COMPRESS=y
 
 ## lihaiyan@wind-mobi.com memory optimization ---
-CONFIG_JOYSTICK_XPAD_FF=y
-CONFIG_INPUT_JOYDEV=y
-CONFIG_HID_SONY=y
+
 

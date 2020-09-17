@@ -1,4 +1,4 @@
-/* Copyright (c) 2014-2019 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014-2018 The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -862,18 +862,14 @@ void jeita_charging_polling_work_handler(struct work_struct *work) {
     voltage = get_prop_batt_voltage_now(chip_for_fg);
     temp    = get_prop_batt_temp(chip_for_fg);
     pr_info("wind-log: --- voltage:%d, temp:%d\n", voltage,temp);
-/*
+
     //renyongwei@wind-mobi.com 20180403 begin
     if ((power_off_charger == 1) && (temp >= 600)) {
         pr_err("wind-log: system restart then in SBL while loop\n");
         kernel_restart(NULL);
     }
     //renyongwei@wind-mobi.com 20180403 end
-*/
-    if (temp >= 600) {
-        pr_err("wind-log: system restart then in SBL while loop\n");
-        kernel_restart(NULL);
-    }
+
     //renyongwei@wind-mobi.com 20180102  begin
     //printk("wind-log:qpnp-smbcharger asus_thermal_get_temp starting\n");
     case_therm_Temp = asus_thermal_get_temp(pcb_tz_asus) / 1000;
@@ -942,9 +938,6 @@ void jeita_charging_polling_work_handler(struct work_struct *work) {
     } else {
         temp_charge_stop_flag = 1;
     }
-	if (temp >= 550){
-		temp_charge_stop_flag = 1;
-	}
     pr_info("wind-jeita-test--- current_set=%d, temp_charge_stop_flag=%d", current_set, temp_charge_stop_flag); 
     //renyongwei@wind-mobi.com 20180329 end
 
@@ -1550,6 +1543,7 @@ static int get_prop_batt_status(struct smbchg_chip *chip)
         return POWER_SUPPLY_STATUS_FULL;
     }
 #endif
+
 	rc = smbchg_read(chip, &reg, chip->chgr_base + RT_STS, 1);
 	if (rc < 0) {
 		dev_err(chip->dev, "Unable to read RT_STS rc = %d\n", rc);
@@ -2311,6 +2305,7 @@ static int smbchg_set_high_usb_chg_current(struct smbchg_chip *chip,
 #endif
 
 	usb_cur_val = i & USBIN_INPUT_MASK;
+
 	rc = smbchg_sec_masked_write(chip, chip->usb_chgpth_base + IL_CFG,
 				USBIN_INPUT_MASK, usb_cur_val);
 	if (rc < 0) {
@@ -3978,6 +3973,8 @@ static int smbchg_float_voltage_comp_set(struct smbchg_chip *chip, int code)
 #define VHIGH_RANGE_FLOAT_MIN_MV	4360
 #define VHIGH_RANGE_FLOAT_MIN_VAL	0x2C
 #define VHIGH_RANGE_FLOAT_STEP_MV	20
+extern int condition_value;
+extern int FV_JEITA_uV;
 static int smbchg_float_voltage_set(struct smbchg_chip *chip, int vfloat_mv)
 {
 	struct power_supply *parallel_psy = get_parallel_psy(chip);
@@ -3988,6 +3985,10 @@ static int smbchg_float_voltage_set(struct smbchg_chip *chip, int vfloat_mv)
 		dev_err(chip->dev, "bad float voltage mv =%d asked to set\n",
 					vfloat_mv);
 		return -EINVAL;
+	}
+
+	if (condition_value) {
+		vfloat_mv = FV_JEITA_uV;
 	}
 
 	if (vfloat_mv <= HIGH_RANGE_FLOAT_MIN_MV) {
@@ -4516,7 +4517,7 @@ static int smbchg_config_chg_battery_type(struct smbchg_chip *chip)
 	rc = of_property_read_u32(profile_node, "qcom,max-voltage-uv",
 						&max_voltage_uv);
 	if (rc) {
-		pr_warn("couldn't find battery max voltage rc=%d\n", rc);
+		pr_err("couldn't find battery max voltage rc=%d\n", rc);
 		ret = rc;
 	} else {
 		if (chip->vfloat_mv != (max_voltage_uv / 1000)) {
@@ -4537,7 +4538,7 @@ static int smbchg_config_chg_battery_type(struct smbchg_chip *chip)
 	rc = of_property_read_u32(profile_node, "qcom,chg-term-ua",
 						&iterm_ua);
 	if (rc && rc != -EINVAL) {
-		pr_warn("couldn't read battery term current=%d\n", rc);
+		pr_err("couldn't read battery term current=%d\n", rc);
 		ret = rc;
 	} else if (!rc) {
 		if (chip->iterm_ma != (iterm_ua / 1000)
@@ -5396,6 +5397,7 @@ static int smbchg_change_usb_supply_type(struct smbchg_chip *chip,
     pr_info("[adapter_id] Type %d: adapter_id_dcp_flag=%d, current_limit_ma=%d, chip->usb_max_current_ma=%d, current_set_global=0x%x\n",
             type, adapter_id_dcp_flag, current_limit_ma,chip->usb_max_current_ma, current_set_global);
 #endif
+
 	pr_smb(PR_STATUS, "Type %d: setting mA = %d\n",
 		type, current_limit_ma);
 #ifdef CONFIG_ASUS_ADAPTER_ID
@@ -7070,7 +7072,6 @@ static int smbchg_battery_get_property(struct power_supply *psy,
 		break;
 	case POWER_SUPPLY_PROP_CURRENT_NOW:
 		val->intval = get_prop_batt_current_now(chip);
-		val->intval *= (-1);
 		break;
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
 		val->intval = get_prop_batt_voltage_now(chip);

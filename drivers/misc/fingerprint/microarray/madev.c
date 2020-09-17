@@ -840,7 +840,6 @@ static int __init mas_init(void)
 {
     int ret = 0;
     MALOGF("start");
-    printk("12345mafp\n");
     compatible = 1;
 /*    ret = mas_get_platform();
     if(ret){

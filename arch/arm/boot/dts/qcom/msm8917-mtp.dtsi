@@ -82,7 +82,6 @@
 		fp-gpio-power = <&tlmm  86 0x00>;
 		status = "okay";
 	    };
-/*
 	hbtp {
 		compatible = "qcom,hbtp-input";
 		vcc_ana-supply = <&pm8917_l10>;
@@ -94,7 +93,7 @@
 		qcom,dig-vtg-min = <1800000>;
 		qcom,dig-vtg-max = <1800000>;
 	};
-*/
+
 	//liulinsheng@wind-mobi.com 20170824 begin
 	usb_tem_det: usb_tem_det{
 		compatible = "qcom, usb_tem_det-eint";

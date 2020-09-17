@@ -933,7 +933,7 @@ qpnp_pon_input_dispatch(struct qpnp_pon *pon, u32 pon_type)
 	case PON_KPDPWR:
 		pon_rt_bit = QPNP_PON_KPDPWR_N_SET;
 /* liuxiong@wind-mobi.com 20181017 begin for powerkey ---*/
-		printk("[yukai][qpnp-power-on] PON_KPDPWR!!! keycode=%d, state=%d \n",cfg->key_code,(pon_rt_sts & pon_rt_bit));
+		printk("[qpnp-power-on] PON_KPDPWR!!! keycode=%d, state=%d \n",cfg->key_code,(pon_rt_sts & pon_rt_bit));
 		/* for phone hang debug */
 		pon_for_powerkey = pon;
 		if(boot_after_60sec){
